@@ -1,0 +1,8 @@
+{
+  "name": "git-lfs-s3-proxy",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "aws4fetch": "^1.0.17"
+  }
+}
