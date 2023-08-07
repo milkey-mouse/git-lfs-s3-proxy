@@ -2,7 +2,7 @@
 
 This [Cloudflare Pages](https://pages.cloudflare.com/) site acts as a [Git LFS](https://git-lfs.com/) server backed by any S3-compatible service.
 
-- By replacing GitHub's default LFS server with an [R2](https://developers.cloudflare.com/r2) bucket behind this proxy, your repos can store up to 10 GB in LFS and use unlimited bandwidth for free, as opposed to GitHub's 1 GiB storage and 1 GiB/month bandwidth [free tier limits](https://docs.github.com/en/billing/managing-billing-for-git-large-file-storage/about-billing-for-git-large-file-storage#about-billing-for-git-large-file-storage). Storage exceeding the free tier costs $0.015/GB-month on R2 instead of $0.10/GB-month on GitHub.
+- By replacing GitHub's default LFS server with an [R2](https://developers.cloudflare.com/r2) bucket behind this proxy, LFS uploads and downloads become free instead of $0.0875/GiB exceeding 10 GiB/month across all repos [and forks](https://docs.github.com/en/repositories/working-with-files/managing-large-files/collaboration-with-git-large-file-storage#pushing-large-files-to-forks). Storage exceeding the free tier costs $0.015/GB-month on R2 instead of $0.07/GB-month on GitHub.
 - On most services, latency is low enough to [serve entire websites](https://github.com/milkey-mouse/git-lfs-client-worker) directly from your LFS server. This also allows you to transparently overcome the [25 MiB](https://developers.cloudflare.com/pages/platform/limits/#file-size) Cloudflare Pages file size limit by automatically adding any files over this size to LFS.
 
 # Usage
