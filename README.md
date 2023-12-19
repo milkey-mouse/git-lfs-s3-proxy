@@ -38,6 +38,8 @@ You should now have (to use S3's terminology) two values:
 - An access key ID (example: `AKIAIOSFODNN7EXAMPLE`)
 - A secret access key (example: `wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY`)
 
+If either value contains non-alphanumeric characters, you may need to [urlencode](https://www.urlencoder.org/) each value.
+
 ### Optional: Deploy your own instance of the proxy
 
 A canonical instance of the proxy runs at `git-lfs-s3-proxy.pages.dev`, which can be used by any project. However, there are a few reasons you might want to run your own:
