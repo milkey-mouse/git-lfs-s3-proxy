@@ -19,7 +19,7 @@ First, create a bucket on an S3-compatible object store to host your LFS assets.
 - [Linode Object Storage](https://www.linode.com/docs/products/storage/object-storage/guides/manage-buckets/)
 - [DigitalOcean Spaces](https://docs.digitalocean.com/products/spaces/how-to/create/)
 
-We recommend R2 for its generous free tier: your LFS repos can store up to 10 GB and use unlimited bandwidth to write up to 1 million objects and read up to 10 million objects. If serving assets via [LFS Client Worker](https://github.com/milkey-mouse/git-lfs-client-worker), R2 has the additional benefit of being in the same datacenters as the worker.
+We recommend R2 for its generous free tier: your LFS repos can store up to 10 GB and use unlimited bandwidth to write up to 1 million objects and read up to 10 million objects. If serving assets via [LFS Client Worker](https://github.com/milkey-mouse/git-lfs-client-worker), R2 has the additional benefit of being in the same data centers as the worker.
 
 ### Create an access key
 
@@ -124,7 +124,25 @@ Even if the Git LFS binary was already installed, the smudge and clean filters G
 
 If you were already using Git LFS, ensure any existing LFS objects are uploaded to the new server:
 
+it would be best you first clone the repository using --bare ex:
+
+    git clone --bare <GIT REPO URL>
+
+then pulling all the LFS objects from the current server
+
+    git lfs fetch --all
+
+after that push all the LFS objects to the new server:
+
     git lfs push --all
+
+if you are using GitLab's LFS storage you will need to disable the repositories LFS option using the GitLab API you can do that with this CURL command
+
+    curl --request PUT --header "PRIVATE-TOKEN: <your-token>" \
+     --url "https://gitlab.com/api/v4/projects/<your-project-ID>" \
+     --data "lfs_enabled=false"
+
+after that, you can push the LFS objects to the new server and GitLab won't throw a pre-commit hook error
 
 #### Start using LFS
 
