@@ -73,6 +73,11 @@ where `<ACCESS_KEY_ID>` and `<SECRET_ACCESS_KEY>` are the first and second value
 
     https://ed41437d53a69dfc:dc49cbe38583b850a7454c89d74fcd51@git-lfs-s3-proxy.pages.dev/7795d95f5507a0c89bd1ed3de8b57061.r2.cloudflarestorage.com/my-site
 
+### Upload existing LFS objects
+
+If you were already using Git LFS, ensure you have a local copy of any existing LFS objects before you change servers:
+
+    git lfs fetch --all
 
 ### Configure Git to use your LFS server
 
@@ -124,7 +129,22 @@ Even if the Git LFS binary was already installed, the smudge and clean filters G
 
 If you were already using Git LFS, ensure any existing LFS objects are uploaded to the new server:
 
-    git lfs push --all
+    git lfs push --all origin
+
+#### GitLab only: Disable built-in LFS
+
+GitLab "helpfully" rejects commits containing "missing" LFS objects. After configuring a non-GitLab LFS server, GitLab will consider all new LFS objects "missing" and reject new commits:
+
+    remote: GitLab: LFS objects are missing. Ensure LFS is properly set up or try a manual "git lfs push --all".
+    To gitlab.com:milkey-mouse/lfs-test
+     ! [remote rejected] main -> main (pre-receive hook declined)
+    error: failed to push some refs to 'gitlab.com:milkey-mouse/lfs-test'
+
+To disable this "feature", disable LFS on the GitLab repository. This can be done via the repository's GitLab page with **Settings** > **General** > **Visibility, project features, permissions** (click **Expand**) > **Repository** > **Git Large File Storage (LFS)** (disable, then click **Save changes**), or via the API:
+
+    curl --request PUT --header "PRIVATE-TOKEN: <your-token>" \
+     --url "https://gitlab.com/api/v4/projects/<your-project-ID>" \
+     --data "lfs_enabled=false"
 
 #### Start using LFS
 
