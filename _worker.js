@@ -66,9 +66,27 @@ async function fetch(req, env) {
   }*/
 
   const { user, pass } = parseAuthorization(req);
-  const s3 = new AwsClient({ accessKeyId: user, secretAccessKey: pass });
-  const bucket = url.pathname.slice(1, -14);
-  const expires_in = env.EXPIRY || EXPIRY;
+  let s3Options = { accessKeyId: user, secretAccessKey: pass };
+
+  const segments = url.pathname.split("/").slice(1, -2);
+  let params = {};
+  let bucketIdx = 0;
+  for (const segment of segments) {
+    const sliceIdx = segment.indexOf("=");
+    if (sliceIdx === -1) {
+      break;
+    } else {
+      const key = decodeURIComponent(segment.slice(0, sliceIdx));
+      const val = decodeURIComponent(segment.slice(sliceIdx + 1));
+      s3Options[key] = val;
+
+      bucketIdx++;
+    }
+  }
+
+  const s3 = new AwsClient(s3Options);
+  const bucket = segments.slice(bucketIdx).join("/");
+  const expires_in = params.expiry || env.EXPIRY || EXPIRY;
 
   const { objects, operation } = await req.json();
   const method = METHOD_FOR[operation];
